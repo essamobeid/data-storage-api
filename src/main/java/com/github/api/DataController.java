@@ -59,5 +59,21 @@ public class DataController {
         }
     }
 
+    @DeleteMapping(value = "/{repository}/{objectID}",
+            produces = {
+                    MediaType.APPLICATION_JSON_VALUE
+            })
+    public ResponseEntity deleteRepository(@PathVariable String repository, @PathVariable String objectID){
+        if(store.containsKey(repository)){
+            for(RepositoryEntity repo: store.get(repository)){
+                if(repo.getOid().equals(objectID)){
+                    store.get(repository).remove(repo);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
 
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
